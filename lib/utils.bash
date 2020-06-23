@@ -34,14 +34,14 @@ platform() {
   local platform
 
   case "$(uname -m)" in
-  x86_64 | x86-64 | x64 | amd64) architecture="amd64" ;;
-  *) fail "Unsupported architecture" ;;
+    x86_64 | x86-64 | x64 | amd64) architecture="amd64" ;;
+    *) fail "Unsupported architecture" ;;
   esac
 
   case "$(uname -s)" in
-  Darwin*) platform="darwin_${architecture}" ;;
-  Linux*) platform="linux_${architecture}" ;;
-  *) fail "Unsupported platform" ;;
+    Darwin*) platform="darwin_${architecture}" ;;
+    Linux*) platform="linux_${architecture}" ;;
+    *) fail "Unsupported platform" ;;
   esac
 
   echo "$platform"
