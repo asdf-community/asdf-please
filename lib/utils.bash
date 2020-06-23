@@ -9,7 +9,7 @@ fail() {
   exit 1
 }
 
-curl_opt=("-fsSL")
+curl_opt=("-fSL")
 
 if test -n "$GITHUB_API_TOKEN"; then
   curl_opt+=("-H" "'Authorization: token $GITHUB_API_TOKEN'")
