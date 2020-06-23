@@ -20,6 +20,7 @@ jobs:
       - name: asdf_plugin_test
         uses: asdf-vm/actions/plugin-test@v1
         with:
+          version: 14.5.6
           command: plz --version
         env:
           GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
