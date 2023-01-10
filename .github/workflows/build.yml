@@ -1,11 +1,11 @@
 name: Build
+
 on:
-  pull_request:
-    paths-ignore:
-      - "**.md"
   push:
-    paths-ignore:
-      - "**.md"
+    branches:
+      - main
+      - master
+  pull_request:
   schedule:
     - cron: "0 0 7,14 * *"
 
@@ -14,13 +14,15 @@ jobs:
     name: asdf plugin test
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os:
+          - ubuntu-latest
+          - macos-latest
     runs-on: ${{ matrix.os }}
+    env:
+      ASDF_OP_DEBUG: true
+      CI: true
     steps:
       - name: asdf_plugin_test
         uses: asdf-vm/actions/plugin-test@v1
         with:
-          version: 14.5.6
           command: plz --version
-        env:
-          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
