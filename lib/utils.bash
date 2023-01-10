@@ -7,14 +7,15 @@ TOOL_NAME="please"
 TOOL_TEST="please -v"
 
 fail() {
-  echo -e "\e[31mFail:\e[m $*"
+  echo -e "asdf-$TOOL_NAME: $*"
   exit 1
 }
 
 curl_opt=("-fSL")
 
-if test -n "$GITHUB_API_TOKEN"; then
-  curl_opt+=("-H" "'Authorization: token $GITHUB_API_TOKEN'")
+# NOTE: You might want to remove this if <YOUR TOOL> is not hosted on GitHub releases.
+if [ -n "${GITHUB_API_TOKEN:-}" ]; then
+  curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
 
 sort_versions() {
@@ -70,25 +71,24 @@ download_release() {
 install_version() {
   local install_type="$1"
   local version="$2"
-  local install_path="$3"
+  local install_path="${3%/bin}/bin"
 
   if [ "$install_type" != "version" ]; then
     fail "asdf-please supports release installs only"
   fi
 
   (
-    local release_file="$install_path/please-$version.tar.xz"
-    mkdir -p "$install_path/bin"
-    download_release "$version" "$release_file"
-    tar -xJpf "$release_file" -C "$install_path/bin" --strip-components=1 || fail "Could not extract $release_file"
-    rm "$release_file"
-    (
-      cd "$install_path/bin"
-      ln -s please plz
-    )
-    echo "please $version installation was successful!"
+    mkdir -p "$install_path"
+    cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+
+    # TODO: Assert <YOUR TOOL> executable exists.
+    local tool_cmd
+    tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
+    test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
+
+    echo "$TOOL_NAME $version installation was successful!"
   ) || (
     rm -rf "$install_path"
-    fail "An error ocurred while installing please $version."
+    fail "An error occurred while installing $TOOL_NAME $version."
   )
 }
