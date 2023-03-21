@@ -34,7 +34,7 @@ platform() {
   local platform
 
   case "$(uname -m)" in
-    x86_64 | x86-64 | x64 | amd64) architecture="amd64" ;;
+    x86_64 | x86-64 | x64 | amd64 | arm64) architecture="amd64" ;;
     *) fail "Unsupported architecture" ;;
   esac
 
