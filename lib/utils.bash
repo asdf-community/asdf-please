@@ -33,8 +33,10 @@ platform() {
   local architecture
   local platform
 
+  echo "* Detecting platform... $(uname -s) $(uname -m)"
+
   case "$(uname -m)" in
-    x86_64 | x86-64 | x64 | amd64) architecture="amd64" ;;
+    x86_64 | x86-64 | x64 | amd64 | arm64) architecture="amd64" ;;
     *) fail "Unsupported architecture" ;;
   esac
 
@@ -51,6 +53,8 @@ download_release() {
   local version filename url
   version="$1"
   filename="$2"
+
+  echo "* download_release Detecting platform... $(uname -s) $(uname -m)"
 
   url="$GH_REPO/releases/download/v${version}/please_${version}_$(platform).tar.xz"
 
